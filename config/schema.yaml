@@ -1,0 +1,59 @@
+columns:
+  - Loan_ID: category            
+  - Gender: category               
+  - Married: category             
+  - Dependents: category            
+  - Education: category            
+  - Self_Employed: category        
+  - ApplicantIncome: int    
+  - CoapplicantIncome: int  
+  - LoanAmount: int         
+  - Loan_Amount_Term: int   
+  - Credit_History: int       
+  - Property_Area: category        
+  - Loan_Status: category        
+
+numerical_columns:
+  - ApplicantIncome 
+  - CoapplicantIncome 
+  - LoanAmount
+
+categorical_columns:
+  - Loan_ID
+  - Gender 
+  - Married 
+  - Dependents 
+  - Education 
+  - Self_Employed 
+  - Loan_Amount_Term 
+  - Credit_History 
+  - Property_Area 
+  - Loan_Status
+
+
+drop_columns:
+  - Loan_ID
+  
+
+# for data transformation
+num_features:
+  - ApplicantIncome 
+  - CoapplicantIncome 
+  - LoanAmount
+
+or_columns:
+
+oh_columns:
+  - Gender 
+  - Married 
+  - Dependents 
+  - Education 
+  - Self_Employed 
+  - Loan_Amount_Term 
+  - Credit_History 
+  - Property_Area 
+
+transform_columns:
+  - ApplicantIncome 
+  - CoapplicantIncome 
+  - LoanAmount
