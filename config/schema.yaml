@@ -42,14 +42,14 @@ num_features:
   - LoanAmount
 
 or_columns:
+ - Loan_Amount_Term
+ - Dependents 
+ - Education 
 
 oh_columns:
   - Gender 
   - Married 
-  - Dependents 
-  - Education 
   - Self_Employed 
-  - Loan_Amount_Term 
   - Credit_History 
   - Property_Area 
 

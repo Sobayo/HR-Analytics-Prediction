@@ -8,8 +8,8 @@ from loan_status.logger import logging
 
 class TargetValueMapping:
     def __init__(self):
-        self.Certified:int = 0
-        self.Denied:int = 1
+        self.Y:int = 0
+        self.N:int = 1
     def _asdict(self):
         return self.__dict__
     def reverse_mapping(self):

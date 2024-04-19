@@ -69,7 +69,7 @@ class ModelEvaluation:
                 TargetValueMapping()._asdict()
             )
 
-            # trained_model = load_object(file_path=self.model_trainer_artifact.trained_model_file_path)
+            trained_model = load_object(file_path=self.model_trainer_artifact.trained_model_file_path)
             trained_model_f1_score = self.model_trainer_artifact.metric_artifact.f1_score
 
             best_model_f1_score=None
