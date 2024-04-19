@@ -9,9 +9,9 @@ from uvicorn import run as app_run
 
 from typing import Optional
 
-from loan_visa.constant import APP_HOST, APP_PORT
-from loan_visa.pipline.prediction_pipeline import USvisaData, USvisaClassifier
-from loan_visa.pipline.training_pipeline import TrainPipeline
+from loan_status.components import APP_HOST, APP_PORT
+from loan_status.pipeline.prediction_pipeline import LoanStatusData, LoanStatusClassifier
+from loan_status.pipeline.training_pipeline import TrainPipeline
 
 app = FastAPI()
 
@@ -31,37 +31,38 @@ app.add_middleware(
 
 class DataForm:
     def __init__(self, request: Request):
-        self.request: Request = request
-        self.continent: Optional[str] = None
-        self.education_of_employee: Optional[str] = None
-        self.has_job_experience: Optional[str] = None
-        self.requires_job_training: Optional[str] = None
-        self.no_of_employees: Optional[str] = None
-        self.company_age: Optional[str] = None
-        self.region_of_employment: Optional[str] = None
-        self.prevailing_wage: Optional[str] = None
-        self.unit_of_wage: Optional[str] = None
-        self.full_time_position: Optional[str] = None
+        self.Gender: Request = request
+        self.Married: Optional[str] = None
+        self.Dependents: Optional[str] = None
+        self.Education: Optional[str] = None
+        self.Self_Employed: Optional[str] = None
+        self.ApplicantIncome: Optional[str] = None
+        self.CoapplicantIncome: Optional[str] = None
+        self.LoanAmount: Optional[str] = None
+        self.Loan_Amount_Term: Optional[str] = None
+        self.Credit_History: Optional[str] = None
+        self.Property_Area: Optional[str] = None
         
 
-    async def get_usvisa_data(self):
+    async def get_loanstatus_data(self):
         form = await self.request.form()
-        self.continent = form.get("continent")
-        self.education_of_employee = form.get("education_of_employee")
-        self.has_job_experience = form.get("has_job_experience")
-        self.requires_job_training = form.get("requires_job_training")
-        self.no_of_employees = form.get("no_of_employees")
-        self.company_age = form.get("company_age")
-        self.region_of_employment = form.get("region_of_employment")
-        self.prevailing_wage = form.get("prevailing_wage")
-        self.unit_of_wage = form.get("unit_of_wage")
-        self.full_time_position = form.get("full_time_position")
+        self.Gender = form.get("Gender")
+        self.Married = form.get("Married")
+        self.Dependents = form.get("Dependents")
+        self.Education = form.get("Education")
+        self.Self_Employed = form.get("Self_Employed")
+        self.ApplicantIncome = form.get("ApplicantIncome")
+        self.CoapplicantIncome = form.get("CoapplicantIncome")
+        self.LoanAmount = form.get("LoanAmount")
+        self.Loan_Amount_Term = form.get("Loan_Amount_Term")
+        self.Credit_History= form.get("Credit_History")
+        self.Property_Area = form.get("Property_Area")
 
 @app.get("/", tags=["authentication"])
 async def index(request: Request):
 
     return templates.TemplateResponse(
-            "usvisa.html",{"request": request, "context": "Rendering"})
+            "loanstatus.html",{"request": request, "context": "Rendering"})
 
 
 @app.get("/train")
@@ -81,29 +82,30 @@ async def trainRouteClient():
 async def predictRouteClient(request: Request):
     try:
         form = DataForm(request)
-        await form.get_usvisa_data()
+        await form.get_loanstatus_data()
         
-        usvisa_data = USvisaData(
-                                continent= form.continent,
-                                education_of_employee = form.education_of_employee,
-                                has_job_experience = form.has_job_experience,
-                                requires_job_training = form.requires_job_training,
-                                no_of_employees= form.no_of_employees,
-                                company_age= form.company_age,
-                                region_of_employment = form.region_of_employment,
-                                prevailing_wage= form.prevailing_wage,
-                                unit_of_wage= form.unit_of_wage,
-                                full_time_position= form.full_time_position,
+        loanstatus_data = LoanStatusData(
+                                Gender= form.Gender,
+                                Married = form.Married,
+                                Dependents = form.Dependents,
+                                Education = form.Education,
+                                Self_Employed= form.Self_Employed,
+                                ApplicantIncome= form.ApplicantIncome,
+                                CoapplicantIncome = form.CoapplicantIncome,
+                                LoanAmount= form.LoanAmount,
+                                Loan_Amount_Term = form.Loan_Amount_Term,
+                                Credit_History = form.Credit_History,
+                                Property_Area = form.Property_Area
                                 )
         
-        usvisa_df = usvisa_data.get_usvisa_input_data_frame()
+        loanstatus_df = loanstatus_data.get_loanstatus_input_data_frame()
 
-        model_predictor = USvisaClassifier()
+        model_predictor = LoanStatusClassifier()
 
-        value = model_predictor.predict(dataframe=usvisa_df)[0]
+        value = model_predictor.predict(dataframe=loanstatus_df)[0]
 
         status = None
-        if value == 1:
+        if value == 0:
             status = "loan-approved"
         else:
             status = "loan Not-Approved"

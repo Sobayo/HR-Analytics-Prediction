@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from loan_status.entity.estimator import LoanStatusModel
 from loan_status.entity.estimator import TargetValueMapping
 
+
 @dataclass
 class EvaluateModelResponse:
     trained_model_f1_score: float
@@ -62,14 +63,14 @@ class ModelEvaluation:
         """
         try:
             test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
-            #test_df['company_age'] = CURRENT_YEAR-test_df['yr_of_estab']
+            
 
             x, y = test_df.drop(TARGET_COLUMN, axis=1), test_df[TARGET_COLUMN]
             y = y.replace(
                 TargetValueMapping()._asdict()
             )
 
-            trained_model = load_object(file_path=self.model_trainer_artifact.trained_model_file_path)
+            #trained_model = load_object(file_path=self.model_trainer_artifact.trained_model_file_path)
             trained_model_f1_score = self.model_trainer_artifact.metric_artifact.f1_score
 
             best_model_f1_score=None
